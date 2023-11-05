@@ -1,28 +1,35 @@
 import axios from 'axios';
 import { throttledGetDataFromApi } from './index';
 
+jest.mock('lodash', () => {
+  const originalModule = jest.requireActual('lodash');
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    throttle: jest.fn((fn) => fn),
+  };
+});
+
 const baseURL = 'https://jsonplaceholder.typicode.com';
 const relativePath = '/users';
 
 describe('throttledGetDataFromApi', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
-
-  afterAll(() => {
-    jest.useRealTimers();
+  afterEach(() => {
+    // restore the spy created with spyOn
+    jest.restoreAllMocks();
   });
 
   test('should create instance with provided base url', async () => {
-    jest.spyOn(axios, 'create');
-    throttledGetDataFromApi(relativePath);
+    const spy = jest.spyOn(axios, 'create');
+    await throttledGetDataFromApi(relativePath);
 
-    expect(axios.create).toHaveBeenCalledWith({ baseURL });
+    expect(spy).toHaveBeenCalledWith({ baseURL });
   });
 
   test('should perform request to correct provided url', async () => {
-    const spy = jest.fn(throttledGetDataFromApi);
-    spy(relativePath);
+    const spy = jest.spyOn(axios.create(), 'get');
+    await throttledGetDataFromApi(relativePath);
 
     expect(spy).toHaveBeenCalledWith(relativePath);
   });

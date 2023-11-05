@@ -10,8 +10,8 @@ const divideResult = a / b;
 const exponentiateResult = a ** b;
 
 const invalidAction = '++';
+const invalidA = a.toString();
 const invalidB = b.toString();
-const resultForInvalid = null;
 
 describe('simpleCalculator tests', () => {
   test('should add two numbers', () => {
@@ -41,11 +41,14 @@ describe('simpleCalculator tests', () => {
 
   test('should return null for invalid action', () => {
     const result = simpleCalculator({ a, b, action: invalidAction });
-    expect(result).toBe(resultForInvalid);
+    expect(result).toBeNull();
   });
 
   test('should return null for invalid arguments', () => {
-    const result = simpleCalculator({ a, b: invalidB, action: Action.Add });
-    expect(result).toBe(resultForInvalid);
+    const resultA = simpleCalculator({ a: invalidA, b, action: Action.Add });
+    const resultB = simpleCalculator({ a, b: invalidB, action: Action.Add });
+
+    expect(resultA).toBeNull();
+    expect(resultB).toBeNull();
   });
 });

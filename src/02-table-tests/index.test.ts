@@ -11,6 +11,7 @@ const testCases = [
   { a: 12, b: 3, action: Action.Exponentiate, expected: 1728 },
   { a: 12, b: 3, action: '++', expected: null },
   { a: 12, b: '3', action: Action.Add, expected: null },
+  { a: '12', b: 3, action: Action.Add, expected: null },
 ];
 
 describe.each(testCases)('simpleCalculator', ({ a, b, action, expected }) => {

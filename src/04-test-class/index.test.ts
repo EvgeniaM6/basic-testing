@@ -12,6 +12,7 @@ describe('BankAccount', () => {
   test('should create account with initial balance', () => {
     const createdBankAccount = getBankAccount(initialBalance);
     expect(createdBankAccount).toBeInstanceOf(BankAccount);
+    expect(createdBankAccount.getBalance()).toBe(initialBalance);
   });
 
   test('should throw InsufficientFundsError error when withdrawing more than balance', () => {

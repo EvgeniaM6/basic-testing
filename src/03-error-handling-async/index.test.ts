@@ -9,8 +9,7 @@ import {
 describe('resolveValue', () => {
   test('should resolve provided value', async () => {
     const expectedValue = true;
-    const result = await resolveValue(expectedValue);
-    expect(result).toBe(expectedValue);
+    await expect(resolveValue(expectedValue)).resolves.toBe(expectedValue);
   });
 });
 
@@ -33,8 +32,6 @@ describe('throwCustomError', () => {
 
 describe('rejectCustomError', () => {
   test('should reject custom error', async () => {
-    expect(async () => await rejectCustomError()).rejects.toThrow(
-      MyAwesomeError,
-    );
+    expect(rejectCustomError()).rejects.toThrow(MyAwesomeError);
   });
 });
