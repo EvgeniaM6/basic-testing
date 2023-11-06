@@ -14,6 +14,27 @@ jest.mock('lodash', () => {
 const baseURL = 'https://jsonplaceholder.typicode.com';
 const relativePath = '/users';
 
+const axiosInstance = {
+  get: async (relativePathStr: string) => {
+    return new Promise((res) => {
+      const response = {
+        data: relativePathStr,
+      };
+      res(response);
+    });
+  },
+};
+
+jest.mock('axios', () => {
+  return {
+    create: () => {
+      return {
+        get: axiosInstance.get,
+      };
+    },
+  };
+});
+
 describe('throttledGetDataFromApi', () => {
   afterEach(() => {
     // restore the spy created with spyOn
@@ -28,7 +49,7 @@ describe('throttledGetDataFromApi', () => {
   });
 
   test('should perform request to correct provided url', async () => {
-    const spy = jest.spyOn(axios.create(), 'get');
+    const spy = jest.spyOn(axiosInstance, 'get');
     await throttledGetDataFromApi(relativePath);
 
     expect(spy).toHaveBeenCalledWith(relativePath);
